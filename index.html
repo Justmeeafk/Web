@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>proyecto dependencia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="menu">
+        <button onclick="mostrar('inicio')">inicio</button>
+        <button onclick="mostrar('login')">login</button>
+        <button onclick="mostrar('registro')">registro</button>
+    </div>
+
+    <div id="inicio" class="vista">
+        <h1>dependencia tecnológica</h1>
+        <p>usa la tecnología para salir, no para encerrarte.</p>
+
+        <!-- AQUI VA EL WIDGET DEL CLIMA -->
+        <h2>el clima de hoy</h2>
+        <!-- Copia y pega tu iframe aquí. Ejemplo genérico: -->
+        <iframe src="https://widget.windy.com/weather-station/43660" width="200" height="300" style="border:0; border-radius: 4px;"></iframe>
+        <!-- FIN DEL WIDGET -->
+
+        <h2>datos curiosos</h2>
+        <div class="caja-dato">
+            <p><strong>dato:</strong> el promedio de uso de celulares es de 4 horas diarias.</p>
+        </div>
+
+        <h2>tips</h2>
+        <div class="caja-tip">
+            <p>1. regla 20-20-20.</p>
+            <p>2. no lleves celular al baño.</p>
+            <p>3. duerme lejos de la pantalla.</p>
+        </div>
+    </div>
+
+    <div id="login" class="vista" style="display:none;">
+        <h1>login</h1>
+        <form>
+            <input type="email" placeholder="correo electrónico">
+            <input type="password" placeholder="contraseña">
+            <button type="button">ingresar</button>
+        </form>
+    </div>
+
+    <div id="registro" class="vista" style="display:none;">
+        <h1>registro</h1>
+        <form>
+            <input type="email" placeholder="correo electrónico">
+            <input type="password" placeholder="contraseña">
+            <input type="date" placeholder="fecha de nacimiento">
+            <select>
+                <option>país</option>
+                <option>méxico</option>
+                <option>colombia</option>
+            </select>
+            <button type="button">crear cuenta</button>
+        </form>
+    </div>
+
+    <script>
+        function mostrar(id) {
+            document.querySelectorAll('.vista').forEach(v => v.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
