@@ -3,52 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <title>proyecto dependencia</title>
-    <!-- Enlace CORRECTO para Flask -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <!-- Menú unificado (Solo enlaces Flask, sin botones de JS) -->
     <div class="menu">
         <a href="/">inicio</a>
-        <a href="/random_fact">ver dato aleatorio</a>
-        <a href="/secreto">página secreta</a>
-        <!-- Login y Registro son solo visuales por ahora, no tienen ruta real aún -->
-        <a href="#">login</a>
-        <a href="#">registro</a>
+        <a href="/random_fact">dato aleatorio</a>
+        <a href="/secreto" id="secreto-btn" style="display:none;">secreto</a>
+        <button onclick="mostrar('login')">login</button>
+        <button onclick="mostrar('registro')">registro</button>
     </div>
 
-    <!-- Contenido de la página de inicio -->
-    <div class="contenido">
+    <div id="inicio" class="vista">
         <h1>dependencia tecnológica</h1>
-        <p>usa la tecnología para salir, no para encerrarte.</p>
+        <p>usa la tecnología para salir</p>
 
-        <!-- Widget del clima -->
-        <div class="widget-container">
-            <h2>¿qué dice el clima?</h2>
-            <p>mira el clima y decide si sales a caminar hoy.</p>
-            <iframe 
-                src="https://widget.windy.com/weather-station/43660" 
-                width="220" 
-                height="400" 
-                style="border:0; border-radius: 8px;" 
-                allowfullscreen>
-            </iframe>
+        <h2>datos</h2>
+        <div class="caja" id="dato-container">
+            <p id="dato-texto">cargando dato...</p>
+            <button onclick="cargarDato()" class="btn-datos">obtener otro dato</button>
         </div>
 
-        <h2>datos curiosos</h2>
-        <div class="caja-dato">
-            <p><strong>dato 1:</strong> el promedio de uso de celulares es de 4 horas diarias.</p>
-            <p><strong>dato 2:</strong> el primer celular pesaba 1 kilo.</p>
+        <h2>tips</h2>
+        <div class="caja">
+            <p>1. regla 20-20-20</p>
+            <p>2. no lleves celular al baño</p>
+            <p>3. duerme lejos de la pantalla</p>
         </div>
 
-        <h2>tips para desconectar</h2>
-        <div class="caja-tip">
-            <p>1. usa la regla 20-20-20 para descansar la vista.</p>
-            <p>2. no lleves el celular al baño.</p>
-            <p>3. duerme lejos de la pantalla.</p>
+        <h2>juego: cara o moneda</h2>
+        <div class="caja">
+            <p>¿Cara o moneda? elige una y gana un gatito 🐱</p>
+            <button onclick="jugarCara()" class="btn-juego">cara</button>
+            <button onclick="jugarMoneda()" class="btn-juego">moneda</button>
+            <div id="resultado-juego" style="margin-top: 20px; min-height: 50px;"></div>
+        </div>
+
+        <h2>galería de gatitos</h2>
+        <div class="caja">
+            <p>un hermoso gatito</p>
+            <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&h=300&fit=crop" alt="gatito real" style="width: 200px; height: 200px; border-radius: 10px; margin: 10px 0;">
+            <div id="gatito-bailarin" style="font-size: 120px; line-height: 1; height: 150px; display: flex; align-items: center; justify-content: center;">
+                <img src="https://media.tenor.com/Ubr9flHdxqAAAAAj/gato-bailando-gato-meme.gif" alt="gatito bailando" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+            </div>
+            <button onclick="hacerBailar()" class="btn-juego">¡haz bailar al gatito!</button>
         </div>
     </div>
 
+    <div id="login" class="vista" style="display:none;">
+        <h1>login</h1>
+        <form>
+            <input type="email" placeholder="correo">
+            <input type="password" placeholder="clave">
+            <button type="button">ingresar</button>
+        </form>
+        <button onclick="mostrar('inicio')" class="btn-volver">volver</button>
+    </div>
+
+    <div id="registro" class="vista" style="display:none;">
+        <h1>registro</h1>
+        <form>
+            <input type="email" placeholder="correo">
+            <input type="password" placeholder="clave">
+            <input type="date" placeholder="fecha">
+            <select>
+                <option>país</option>
+                <option>méxico</option>
+                <option>colombia</option>
+            </select>
+            <button type="button">crear</button>
+        </form>
+        <button onclick="mostrar('inicio')" class="btn-volver">volver</button>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let clickTimeout;
+
+        function mostrar(id) {
+            document.querySelectorAll('.vista').forEach(v => v.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function cargarDato() {
+            fetch('/api/dato_aleatorio')
+                .then(response => response.json())
+                .then(data => {
+                    const datoTexto = document.getElementById('dato-texto');
+                    const container = document.getElementById('dato-container');
+                    datoTexto.textContent = data.dato;
+                    datoTexto.style.color = data.color;
+                    container.style.borderColor = data.color;
+                    container.style.backgroundColor = data.color + '15';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function jugarCara() {
+            const resultado = Math.random() < 0.5;
+            mostrarResultado(resultado, 'cara');
+        }
+
+        function jugarMoneda() {
+            const resultado = Math.random() < 0.5;
+            mostrarResultado(resultado, 'moneda');
+        }
+
+        function mostrarResultado(gano, eleccion) {
+            const resultadoDiv = document.getElementById('resultado-juego');
+            const resultado = Math.random() < 0.5 ? 'cara' : 'moneda';
+            
+            if (resultado === eleccion) {
+                resultadoDiv.innerHTML = `
+                    <p style="color: #d6ff6b; font-weight: bold;">¡GANASTE! 🎉</p>
+                    <p style="font-size: 60px; line-height: 1;">🐱</p>
+                    <p style="color: #fd98fb;">¡Un gatito bebé es tuyo!</p>
+                `;
+            } else {
+                resultadoDiv.innerHTML = `
+                    <p style="color: #ff6b6b; font-weight: bold;">Perdiste esta vez 😿</p>
+                `;
+                setTimeout(() => {
+                    resultadoDiv.innerHTML = '';
+                }, 2000);
+            }
+        }
+
+        function hacerBailar() {
+            const gatito = document.getElementById('gatito-bailarin');
+            const img = gatito.querySelector('img');
+            
+            gatito.classList.remove('bailar');
+            // Trigger reflow to restart animation
+            void gatito.offsetWidth;
+            gatito.classList.add('bailar');
+            
+            // Alternar entre dos poses
+            const imagenes = [
+                'https://media.tenor.com/Ubr9flHdxqAAAAAj/gato-bailando-gato-meme.gif',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5-yylvnGXYMv2cX_xMHOs_7b_HFpNG8WCCNaE1_u1wbjBEapv'
+            ];
+            
+            let pose = 0;
+            let intervalo = setInterval(() => {
+                pose = pose === 0 ? 1 : 0;
+                img.src = imagenes[pose];
+            }, 150);
+            
+            setTimeout(() => {
+                clearInterval(intervalo);
+                img.src = imagenes[0];
+            }, 1000);
+        }
+
+        // Revelar botón secreto con triple clic en el título
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDato();
+            const titulo = document.querySelector('h1');
+            titulo.style.cursor = 'pointer';
+            titulo.addEventListener('dblclick', function() {
+                document.getElementById('secreto-btn').style.display = 'inline-block';
+            });
+        });
+    </script>
 </body>
 </html>
