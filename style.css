@@ -1,5 +1,5 @@
 body {
-    font-family: 'comic sans ms', sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
     background-color: #ffffff;
     color: #333333;
     text-align: center;
@@ -26,32 +26,34 @@ h2 {
 p {
     max-width: 600px;
     margin: 10px auto;
-    line-height: 1.5;
+    font-size: 16px;
 }
 
 .menu {
     margin-bottom: 30px;
 }
 
-.menu button {
-    background-color: #5988ff;
+.menu a, .menu button {
+    background: #5988ff;
     color: white;
     border: none;
     padding: 10px 20px;
-    margin: 0 5px;
+    margin: 5px;
     border-radius: 8px;
-    cursor: pointer;
+    text-decoration: none;
     font-family: inherit;
     font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
 }
 
-.menu button:hover {
-    background-color: #4a75e0;
+.menu a:hover, .menu button:hover {
+    background: #4a75e0;
 }
 
-.caja-dato, .caja-tip {
-    background-color: #f9f9f9;
-    border: 1px solid #d6ff6b;
+.caja {
+    background: #f9f9f9;
+    border: 2px solid #d6ff6b;
     padding: 15px;
     border-radius: 8px;
     max-width: 600px;
@@ -82,7 +84,7 @@ input, select {
 form button {
     width: 100%;
     padding: 10px;
-    background-color: #d6ff6b;
+    background: #d6ff6b;
     color: #333;
     border: none;
     border-radius: 5px;
@@ -93,5 +95,74 @@ form button {
 }
 
 form button:hover {
-    background-color: #c0e85b;
+    background: #c0e85b;
+}
+
+.btn-volver {
+    background: #fd98fb;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn-volver:hover {
+    background: #e070e0;
+}
+
+.btn-datos {
+    background: #5988ff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+.btn-datos:hover {
+    background: #4a75e0;
+}
+
+.btn-juego {
+    background: #d6ff6b;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.btn-juego:hover {
+    background: #c0e85b;
+}
+
+@keyframes bailar {
+    0% { transform: rotate(0deg) scale(1); }
+    10% { transform: rotate(-5deg) scale(1.1); }
+    20% { transform: rotate(5deg) scale(1.05); }
+    30% { transform: rotate(-5deg) scale(1.1); }
+    40% { transform: rotate(5deg) scale(1.05); }
+    50% { transform: translateY(-20px) rotate(0deg) scale(1.1); }
+    60% { transform: rotate(-5deg) scale(1.05); }
+    70% { transform: rotate(5deg) scale(1.1); }
+    80% { transform: rotate(-5deg) scale(1.05); }
+    90% { transform: rotate(5deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+.bailar {
+    animation: bailar 1s ease-in-out;
 }
