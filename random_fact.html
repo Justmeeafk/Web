@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dato aleatorio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="menu">
+    <a href="/">inicio</a>
+    <a href="/random_fact">dato aleatorio</a>
+    <a href="/secreto">secreto</a>
+  </div>
+
+  <h1>Dato aleatorio</h1>
+  <div class="caja">
+    <p>{{ seleccion }}</p>
+  </div>
+
+  <a href="/" class="btn-volver">volver al inicio</a>
+</body>
+</html>
