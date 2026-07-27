@@ -1,7 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import random
 
-# Configuración: Busca las plantillas en la carpeta 'template' (singular)
 app = Flask(__name__, template_folder='template')
 
 datos = [
@@ -20,91 +19,37 @@ adivinanzas = [
 
 @app.route("/")
 def inicio():
-    return render_template("index.html")
+    return render_template("index.html", lights="/lights")
+
+@app.route("/lights/<opcion>")
+def lights(opcion):
+    instrucciones = {
+        "3": "Reciclaje básico: retira las pilas, guárdalas en un frasco cerrado y lleva los aparatos pequeños a un punto de acopio en supermercados o universidades.",
+        "5": "Reciclaje básico: retira las pilas, guárdalas en un frasco cerrado y lleva los aparatos pequeños a un punto de acopio en supermercados o universidades.",
+        "6": "Reciclaje intermedio: usa una caja resistente, etiqueta como 'Residuos electrónicos con pilas', cubre los polos con cinta y entrégala en centros especializados.",
+        "8": "Reciclaje intermedio: usa una caja resistente, etiqueta como 'Residuos electrónicos con pilas', cubre los polos con cinta y entrégala en centros especializados.",
+        "10": "Reciclaje avanzado: organiza una entrega comunitaria, contacta programas ecológicos locales y entrega los aparatos en campañas de reciclaje masivo.",
+        "12": "Reciclaje avanzado: organiza una entrega comunitaria, contacta programas ecológicos locales y entrega los aparatos en campañas de reciclaje masivo."
+    }
+    instruccion = instrucciones.get(opcion, "Opción no válida. Por favor selecciona un número de electrodomésticos válido.")
+    return render_template("lights.html", opcion=opcion, instruccion=instruccion)
 
 @app.route("/random_fact")
 def dato_aleatorio():
     seleccion = random.choice(datos)
-    return f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>dato aleatorio</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <div class="menu">
-            <a href="/">inicio</a>
-            <a href="/random_fact">dato aleatorio</a>
-            <a href="/secreto">secreto</a>
-        </div>
-        <h1>dato del día</h1>
-        <div class="caja">
-            <p>{seleccion}</p>
-        </div>
-        <br>
-        <a href="/" class="btn-volver">volver al inicio</a>
-    </body>
-    </html>
-    """
+    return render_template("random_fact.html", seleccion=seleccion)
 
 @app.route("/api/dato_aleatorio")
 def api_dato_aleatorio():
-    import json
     seleccion = random.choice(datos)
     colores = ["#5988ff", "#fd98fb", "#d6ff6b", "#ff6b6b", "#6bffd6"]
     color = random.choice(colores)
-    return json.dumps({"dato": seleccion, "color": color})
+    return jsonify(dato=seleccion, color=color)
 
 @app.route("/secreto")
 def pagina_secreta():
     adivinanza = random.choice(adivinanzas)
-    return f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>secreto</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <style>
-            .caja-secreta {{
-                background: #f9f9f9;
-                border: 3px dashed {adivinanza['c']};
-                padding: 30px;
-                border-radius: 15px;
-                max-width: 400px;
-                margin: 30px auto;
-                text-align: center;
-            }}
-            .btn-volver {{
-                background: #5988ff;
-                color: white;
-                padding: 10px 20px;
-                text-decoration: none;
-                border-radius: 8px;
-                display: inline-block;
-                margin-top: 20px;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="menu">
-            <a href="/">inicio</a>
-            <a href="/random_fact">dato aleatorio</a>
-            <a href="/secreto">secreto</a>
-        </div>
-        <h1>zona secreta</h1>
-        <div class="caja-secreta">
-            <h2 style="color: {adivinanza['c']}">adivinanza</h2>
-            <p>{adivinanza['p']}</p>
-            <p>respuesta: <strong>{adivinanza['r']}</strong></p>
-        </div>
-        <br>
-        <a href="/" class="btn-volver">volver al inicio</a>
-    </body>
-    </html>
-    """
+    return render_template("secreto.html", adivinanza=adivinanza)
 
 if __name__ == "__main__":
     app.run(debug=True)
